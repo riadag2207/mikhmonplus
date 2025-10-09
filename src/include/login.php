@@ -30,7 +30,7 @@ session_start();
         <img src="img/favicon.png" alt="MIKHMON Logo">
       </div>
       <div  class="text-center">
-      <span style="font-size: 24px; margin: 10px;">MIKHMON</span><br><b style="font-size:16px;font-weight:bolder;">INTERHOME HOTSPOT</b>
+      <span style="font-size: 24px; margin: 10px;">MIKHMON</span><br><b style="font-size:16px;font-weight:bolder;"></b>
       <center>
       <form autocomplete="off" action="" method="post">
       <table class="table" style="width:90%">
