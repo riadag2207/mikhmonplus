@@ -24,6 +24,7 @@ if (!isset($_SESSION["mikhmon"])) {
 
   $getbridge = $API->comm("/interface/bridge/print");
   $getremoteaddress = $API->comm("/ip/pool/print");
+  $getprofiles = $API->comm("/ppp/profile/print");
 
   if (isset($_POST['name'])) {
     $name = (preg_replace('/\s+/', '-', $_POST['name']));
@@ -43,9 +44,33 @@ if (!isset($_SESSION["mikhmon"])) {
     $winsserver = ($_POST['winsserver']);
     $changetcp = ($_POST['changetcp']);
     $useupnp = ($_POST['useupnp']);
+    
+    // Auto-Isolir settings
+    $enable_isolir = isset($_POST['enable_isolir']) ? true : false;
+    $isolir_profile = isset($_POST['isolir_profile']) ? trim($_POST['isolir_profile']) : '';
+    $isolir_interval = isset($_POST['isolir_interval']) ? trim($_POST['isolir_interval']) : '';
+    
+    // Get script from form
+    $profile_script = isset($_POST['profile_script']) ? trim($_POST['profile_script']) : '';
+    
+    // Build comment with isolir settings if enabled
+    $comment = '';
+    if ($enable_isolir && !empty($isolir_profile) && !empty($isolir_interval)) {
+      $comment = 'ISOLIR:' . $isolir_profile . ':' . $isolir_interval;
+      
+      // Auto-generate script if isolir enabled and script is empty
+      if (empty($profile_script)) {
+        // Escape profile name for script
+        $isolir_profile_escaped = str_replace('\\', '\\\\', $isolir_profile);
+        $isolir_profile_escaped = str_replace('"', '\\"', $isolir_profile_escaped);
+        
+        // Generate script based on user example
+        $profile_script = ':local pengguna $"user"; :local date [/system clock get date]; :local time [/system clock get time]; :log info "User PPPoE $pengguna login pada $time tanggal $date"; { :if ([/system scheduler find name="exp-$pengguna"]="") do={ /system scheduler add name="exp-$pengguna" interval=' . $isolir_interval . ' on-event="/ppp secret set profile=\"' . $isolir_profile_escaped . '\" [find name=\\$pengguna]; /ppp active remove [find name=\\$pengguna]; :log warning \"User \\$pengguna expired dan dipindah ke profile ' . $isolir_profile_escaped . '\"; /system scheduler remove [find name=\"exp-\\$pengguna\"]"; :log info "Scheduler auto expiry dibuat untuk user $pengguna (' . $isolir_interval . ')"; } }';
+      }
+    }
 
     if ($bridge != '' || $bridge != NULL) {
-      $API->comm("/ppp/profile/add", array(
+      $profileParams = array(
         /*"add-mac-cookie" => "yes",*/
         "name" => "$name",
         "local-address" => "$localaddress",
@@ -60,9 +85,21 @@ if (!isset($_SESSION["mikhmon"])) {
         "wins-server" => "$winsserver",
         "change-tcp-mss" => "$changetcp",
         "use-upnp" => "$useupnp",
-      ));
+      );
+      
+      // Add comment if isolir enabled
+      if (!empty($comment)) {
+        $profileParams["comment"] = $comment;
+      }
+      
+      // Add script (on-up) if provided
+      if (!empty($profile_script)) {
+        $profileParams["on-up"] = $profile_script;
+      }
+      
+      $API->comm("/ppp/profile/add", $profileParams);
     } else {
-      $API->comm("/ppp/profile/add", array(
+      $profileParams = array(
         /*"add-mac-cookie" => "yes",*/
         "name" => "$name",
         "local-address" => "$localaddress",
@@ -77,7 +114,19 @@ if (!isset($_SESSION["mikhmon"])) {
         "wins-server" => "$winsserver",
         "change-tcp-mss" => "$changetcp",
         "use-upnp" => "$useupnp",
-      ));
+      );
+      
+      // Add comment if isolir enabled
+      if (!empty($comment)) {
+        $profileParams["comment"] = $comment;
+      }
+      
+      // Add script (on-up) if provided
+      if (!empty($profile_script)) {
+        $profileParams["on-up"] = $profile_script;
+      }
+      
+      $API->comm("/ppp/profile/add", $profileParams);
     }
 
 
@@ -202,6 +251,55 @@ if (!isset($_SESSION["mikhmon"])) {
                 </select>
               </td>
             </tr>
+            <tr>
+              <td colspan="2" style="background-color: #f0f0f0; padding: 10px;">
+                <strong><i class="fa fa-shield"></i> Auto Isolir Settings</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">Enable Auto Isolir</td>
+              <td>
+                <label>
+                  <input type="checkbox" name="enable_isolir" id="enable_isolir" onchange="toggleIsolirFields()">
+                  Aktifkan fitur auto isolir (otomatis ganti profile setelah interval)
+                </label>
+              </td>
+            </tr>
+            <tr id="isolir_profile_row" style="display: none;">
+              <td class="align-middle">Profile ISOLIR</td>
+              <td>
+                <select class="form-control" name="isolir_profile" id="isolir_profile">
+                  <option value="">== Pilih Profile ISOLIR ==</option>
+                  <?php 
+                  $TotalProfiles = count($getprofiles);
+                  for ($i = 0; $i < $TotalProfiles; $i++) {
+                    $profileName = $getprofiles[$i]['name'];
+                    echo "<option value='" . htmlspecialchars($profileName) . "'>" . htmlspecialchars($profileName) . "</option>";
+                  }
+                  ?>
+                </select>
+                <small class="text-muted">Pilih profile yang akan digunakan saat isolir</small>
+              </td>
+            </tr>
+            <tr id="isolir_interval_row" style="display: none;">
+              <td class="align-middle">Interval Scheduler</td>
+              <td>
+                <input class="form-control" type="text" name="isolir_interval" id="isolir_interval" placeholder="Contoh: 1h, 30m, 2d">
+                <small class="text-muted">Format: 1h (1 jam), 30m (30 menit), 2d (2 hari), atau 00:30:00 (jam:menit:detik)</small>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" style="background-color: #f0f0f0; padding: 10px;">
+                <strong><i class="fa fa-code"></i> Script (On-Up)</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle" style="vertical-align: top;">Script</td>
+              <td>
+                <textarea class="form-control" name="profile_script" id="profile_script" rows="8" style="font-family: monospace; font-size: 12px;" placeholder="Script akan otomatis di-generate jika Auto Isolir diaktifkan"></textarea>
+                <small class="text-muted">Script ini akan dijalankan saat user PPPoE login. Variable yang tersedia: <code>$user</code> (username), <code>$interface</code> (interface name)</small>
+              </td>
+            </tr>
           </table>
         </form>
       </div>
@@ -220,4 +318,55 @@ if (!isset($_SESSION["mikhmon"])) {
     upName.value = newUpName;
     upName.focus();
   }
+  
+  function toggleIsolirFields() {
+    var enableCheckbox = document.getElementById('enable_isolir');
+    var profileRow = document.getElementById('isolir_profile_row');
+    var intervalRow = document.getElementById('isolir_interval_row');
+    var scriptField = document.getElementById('profile_script');
+    
+    if (enableCheckbox.checked) {
+      profileRow.style.display = '';
+      intervalRow.style.display = '';
+      document.getElementById('isolir_profile').required = true;
+      document.getElementById('isolir_interval').required = true;
+      
+      // Auto-generate script if field is empty
+      if (!scriptField.value || scriptField.value.trim() === '') {
+        var isolirProfile = document.getElementById('isolir_profile').value;
+        var isolirInterval = document.getElementById('isolir_interval').value;
+        
+        if (isolirProfile && isolirInterval) {
+          var generatedScript = ':local pengguna $"user"; :local date [/system clock get date]; :local time [/system clock get time]; :log info "User PPPoE $pengguna login pada $time tanggal $date"; { :if ([/system scheduler find name="exp-$pengguna"]="") do={ /system scheduler add name="exp-$pengguna" interval=' + isolirInterval + ' on-event="/ppp secret set profile=\\"' + isolirProfile + '\\" [find name=\\$pengguna]; /ppp active remove [find name=\\$pengguna]; :log warning \\"User \\$pengguna expired dan dipindah ke profile ' + isolirProfile + '\\"; /system scheduler remove [find name=\\"exp-\\$pengguna\\"]"; :log info "Scheduler auto expiry dibuat untuk user $pengguna (' + isolirInterval + ')"; } }';
+          scriptField.value = generatedScript;
+        }
+      }
+    } else {
+      profileRow.style.display = 'none';
+      intervalRow.style.display = 'none';
+      document.getElementById('isolir_profile').required = false;
+      document.getElementById('isolir_interval').required = false;
+    }
+  }
+  
+  // Auto-update script when profile or interval changes
+  document.addEventListener('DOMContentLoaded', function() {
+    var isolirProfile = document.getElementById('isolir_profile');
+    var isolirInterval = document.getElementById('isolir_interval');
+    var enableIsolir = document.getElementById('enable_isolir');
+    
+    if (isolirProfile && isolirInterval && enableIsolir) {
+      isolirProfile.addEventListener('change', function() {
+        if (enableIsolir.checked) {
+          toggleIsolirFields();
+        }
+      });
+      
+      isolirInterval.addEventListener('input', function() {
+        if (enableIsolir.checked) {
+          toggleIsolirFields();
+        }
+      });
+    }
+  });
 </script>

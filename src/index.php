@@ -171,6 +171,8 @@ if (!isset($_SESSION["mikhmon"])) {
     include_once('./include/about.php');
   }
 
+// agent setup - removed duplicate, using settings/agent_setup.php instead
+
 // bad request
   elseif (substr($url, -1) == "=") {
     echo "<b class='cl-w'><i class='fa fa-circle-o-notch fa-spin' style='font-size:24px'></i> Bad request! redirect to Home......</b>";
@@ -359,6 +361,186 @@ elseif ($removeexpiredhotspotuser != "") {
 // upload logo
   elseif ($hotspot == "uplogo") {
     include_once('./settings/uplogo.php');
+  }
+
+// whatsapp settings
+  elseif ($hotspot == "whatsapp-settings") {
+    include_once('./settings/whatsapp_settings.php');
+  }
+
+// whatsapp gateway admin
+  elseif ($hotspot == "whatsapp-gateway") {
+    include_once('./settings/whatsapp_gateway_admin.php');
+  }
+
+// agent management
+  elseif ($hotspot == "agent-setup") {
+    try {
+      include_once('./settings/agent_setup_simple.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Agent Setup</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "<p>Trying to load simple version...</p>";
+      echo "</div>";
+      // Fallback to simple content
+      echo "<div class='row'><div class='col-12'><div class='card'>";
+      echo "<div class='card-header'><h3><i class='fa fa-users'></i> Agent System Setup</h3></div>";
+      echo "<div class='card-body'>";
+      echo "<div class='alert alert-warning'><h4>Setup Required</h4>";
+      echo "<p>Agent system needs to be installed. Use the bulletproof installer:</p>";
+      echo "<a href='install_database_bulletproof.php?key=mikhmon-install-2024' class='btn btn-success' target='_blank'>";
+      echo "<i class='fa fa-download'></i> Install Database</a></div>";
+      echo "</div></div></div></div>";
+    }
+  }
+  elseif ($hotspot == "agent-list") {
+    try {
+      include_once('./agent-admin/agent_list.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Agent List</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "<p><a href='./test_agent_db.php' target='_blank'>Test Database Connection</a></p>";
+      echo "</div>";
+    }
+  }
+  elseif ($hotspot == "agent-add") {
+    try {
+      include_once('./agent-admin/agent_add.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Add Agent</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  elseif ($hotspot == "agent-edit") {
+    try {
+      include_once('./agent-admin/agent_edit.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Edit Agent</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  elseif ($hotspot == "agent-prices") {
+    try {
+      include_once('./agent-admin/agent_prices.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Agent Prices</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  elseif ($hotspot == "agent-topup") {
+    try {
+      include_once('./agent-admin/agent_topup.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Agent Topup</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  elseif ($hotspot == "agent-transactions") {
+    try {
+      include_once('./agent-admin/agent_transactions.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Agent Transactions</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  elseif ($hotspot == "voucher-settings") {
+    try {
+      include_once('./agent-admin/voucher_settings.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Voucher Settings</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  elseif ($hotspot == "whatsapp-agent-settings") {
+    try {
+      include_once('./agent-admin/whatsapp_agent_settings.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading WhatsApp Agent Settings</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  
+  // Public Sales - Pricing Management
+  elseif ($hotspot == "pricing") {
+    try {
+      include_once('./agent/pricing.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Pricing</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  
+  // Public Sales - Payment Gateway Config
+  elseif ($hotspot == "payment-gateway-config") {
+    try {
+      include_once('./agent-admin/payment_gateway_config.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Payment Gateway Config</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  
+  // Public Sales - Payment Methods
+  elseif ($hotspot == "payment-methods") {
+    try {
+      include_once('./agent-admin/payment_methods.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Payment Methods</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  
+  // Public Sales - Transactions List
+  elseif ($hotspot == "public-sales") {
+    try {
+      include_once('./agent-admin/public_sales_list.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading Public Sales</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+  }
+  
+  // GenieACS - ONU Management
+  elseif ($hotspot == "genieacs") {
+    // Use NEW file to bypass cache
+    echo "<!-- GenieACS routing START (using main.php) -->";
+    flush();
+    
+    try {
+      include_once('./genieacs/main.php');
+    } catch (Exception $e) {
+      echo "<div style='padding:20px;background:#fee;color:#c33;border-radius:10px;margin:20px;'>";
+      echo "<h3>Error Loading GenieACS</h3>";
+      echo "<p>" . $e->getMessage() . "</p>";
+      echo "</div>";
+    }
+    
+    echo "<!-- GenieACS routing END -->";
+    flush();
   }
 
 // hotspot Cookies

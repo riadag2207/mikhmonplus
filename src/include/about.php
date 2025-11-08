@@ -46,10 +46,10 @@ if (!isset($_SESSION["mikhmon"])) {
         <h3><i class="fa fa-info-circle"></i> About</h3>
       </div>
       <div class="card-body">
-        <h3>MIKHMON V<?= $_SESSION['v']; ?>+PPPOE</h3>
+        <h3>MIKHMON V<?= $_SESSION['v']; ?></h3>
 <p>
-  Aplikasi ini dipersembahkan untuk pengusaha hotspot di manapun Anda berada. <br>
-  Aplikasi ini sudah ditambah menu khusus pelanggan rumahan PPPoE.
+  Aplikasi ini dipersembahkan untuk pengusaha hotspot di manapun Anda berada.
+  Semoga makin sukses.
 </p>
 <p>
   <ul>
@@ -68,16 +68,13 @@ if (!isset($_SESSION["mikhmon"])) {
     <li>
       Facebook : <a href="https://fb.com/laksamadi">fb.com/laksamadi</a>
     </li>
-	<li>
-      ReMOD by : <a href="https://walihuwa.com">Skynet Plays Gorontalo</a>
-    </li>
   </ul>
 </p>
 <p>
-  "Tanpa mengurangi rasa hormat, mohon izin kepada Laksamadi Guko agar apa yang kami lakukan mendapat ridho dan kebijaksanannya."
+  Terima kasih untuk semua yang telah mendukung pengembangan MIKHMON.
 </p>
 <div>
-    <i>Copyright &copy; <i> 2018-2024 Laksamadi Guko</i></i>
+    <i>Copyright &copy; <i> 2018 Laksamadi Guko</i></i>
 </div>
 </div>
 </div>

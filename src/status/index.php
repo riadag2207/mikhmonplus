@@ -40,9 +40,9 @@ $cekindo['indo'] = array('RP', 'Rp', 'rp', 'IDR', 'idr', 'RP.', 'Rp.', 'rp.', 'I
 $API = new RouterosAPI();
 $API->debug = false;
 if ($currency == in_array($currency, $cekindo['indo'])) {
-	$title = array("Status Voucher", "Masukkan Kode Akses", "Paket", "Lama Terhubung", "Pemakaian Data", "Sisa Data", "Masa Aktif", "Dari", "Sampai", "tidak terdaftar.", "sudah kadaluarsa.", "Tanggal", "Cek Status", " Hari", " Jam", "Aktif", "Expired", "Harga");
+	$title = array("Status Voucher", "User/Kode Voucher", "Paket", "Lama Terhubung", "Pemakaian Data", "Sisa Data", "Masa Aktif", "Dari", "Sampai", "tidak terdaftar.", "sudah kadaluarsa.", "Tanggal", "Cek Status", " Hari", " Jam", "Aktif", "Expired");
 } else {
-	$title = array("Voucher Status", "User/Voucher Code", "Profile", "Uptime", "Data Usage", "Data Remaining", "Validity", "Start", "End", "not registered.", "expired.", "Date", "Check Status", " Day", " Hour", "Active", "Expired", "Price");
+	$title = array("Voucher Status", "User/Voucher Code", "Profile", "Uptime", "Data Usage", "Data Remaining", "Validity", "Start", "End", "not registered.", "expired.", "Date", "Check Status", " Day", " Hour", "Active", "Expired");
 }
 if ($currency == in_array($currency, $cekindo['indo'])) {
 	$s = "";
@@ -71,7 +71,7 @@ function goBack() {
 </head>
 <body >
 <div class="login-box" style="padding-top: 10px;">
-<h3 class="text-center">Status Kode Anda<br><?= $hotspotname; ?></h3>
+<h3 class="text-center">Status Voucher<br><?= $hotspotname; ?></h3>
 <p class="text-center" id="date1"><?= $title[11] . " : " . date("d-m-Y") . "<br>"; ?></p>
 <form autocomplete="off"class="form" method="post" action="">
 	<div class="input-group">
@@ -81,8 +81,6 @@ function goBack() {
 		<div class="input-group-5">
 			<button type="submit" style="cursor: pointer; padding: 2.5px;" class="group-item group-item-r"><i class="fa fa-search"></i> <?= " " . $title[12]; ?></button>
 		</div>
-<h3 class="text-center">INFORMASI</h3>
-<p class="text-center">kami menerapkan generate kode akses <br> menggunakan nomor HP atau nama</p>
 </div>
 </form>
 <?php
@@ -93,7 +91,6 @@ if (isset($_POST['nama'])) {
 		$user = $getuser[0]['name'];
 		$profile = $getuser[0]['profile'];
 		$exp = $getuser[0]['comment'];
-		$price = $getprice[0]['price'];
 		$uptime = formatDTM($getuser[0]['uptime']);
 		$getbytein = $getuser[0]['bytes-in'];
 		$getbyteo = $getuser[0]['bytes-out'];
@@ -135,7 +132,7 @@ if (isset($_POST['nama'])) {
 <div class="card-header">
     <h3>
       <i class="fa fa-user mr-1"></i>
-        Data User
+        User Details
     </h3>
   </div>
   <div class="card-body">
@@ -151,8 +148,8 @@ if (isset($_POST['nama'])) {
 	echo "		<td > $profile</td>";
 	echo "	</tr>";
 	echo "	<tr>";
-	echo "		<td >$title[17]</td>";
-	echo "		<td > $price</td>";
+	echo "		<td >$title[3]</td>";
+	echo "		<td > $uptime</td>";
 	echo "	</tr>";
 	echo "	<tr>";
 	echo "		<td >$title[4]</td>";

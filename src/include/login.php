@@ -23,14 +23,15 @@ session_start();
 <div style="padding-top: 5%;"  class="login-box">
   <div class="card">
     <div class="card-header">
-      <h3>Mikhmon Plus</h3>
+      <h3><?= $_please_login ?></h3>
     </div>
     <div class="card-body">
       <div class="text-center pd-5">
         <img src="img/favicon.png" alt="MIKHMON Logo">
       </div>
       <div  class="text-center">
-      <span style="font-size: 24px; margin: 10px;">MIKHMON</span><br><b style="font-size:16px;font-weight:bolder;">Plus</b>
+      <span style="font-size: 25px; margin: 10px;">MIKHMON</span>
+      </div>
       <center>
       <form autocomplete="off" action="" method="post">
       <table class="table" style="width:90%">

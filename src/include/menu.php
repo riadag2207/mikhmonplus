@@ -85,6 +85,66 @@ if (!isset($_SESSION["mikhmon"])) {
     $mpage = $_upload_logo;
     $settmenu = "menu-open";
 	
+  } elseif ($hotspot == "whatsapp-settings") {
+    $ssett = "active";
+    $swhatsapp = "active";
+    $mpage = "WhatsApp Settings";
+    $settmenu = "menu-open";
+	
+  } elseif ($hotspot == "whatsapp-gateway") {
+    $ssett = "active";
+    $swagateway = "active";
+    $mpage = "WhatsApp Gateway";
+    $settmenu = "menu-open";
+	
+  } elseif ($hotspot == "genieacs") {
+    $sgenieacs = "active";
+    $mpage = "GenieACS - ONU Management";
+	
+  } elseif ($hotspot == "agent-setup" || $hotspot == "agent-list" || $hotspot == "agent-add" || $hotspot == "agent-edit" || $hotspot == "agent-prices" || $hotspot == "agent-topup" || $hotspot == "agent-transactions" || $hotspot == "voucher-settings" || $hotspot == "whatsapp-agent-settings" || $hotspot == "pricing" || $hotspot == "payment-gateway-config" || $hotspot == "payment-methods" || $hotspot == "public-sales") {
+    $sagent = "active";
+    if ($hotspot == "agent-setup") {
+      $sagentsetup = "active";
+      $mpage = "Setup Agent System";
+    } elseif ($hotspot == "agent-list") {
+      $sagentlist = "active";
+      $mpage = "Daftar Agent";
+    } elseif ($hotspot == "agent-add") {
+      $sagentadd = "active";
+      $mpage = "Tambah Agent";
+    } elseif ($hotspot == "agent-edit") {
+      $sagentedit = "active";
+      $mpage = "Edit Agent";
+    } elseif ($hotspot == "agent-prices") {
+      $sagentprices = "active";
+      $mpage = "Harga Agent";
+    } elseif ($hotspot == "agent-topup") {
+      $sagenttopup = "active";
+      $mpage = "Topup Agent";
+    } elseif ($hotspot == "agent-transactions") {
+      $sagenttrans = "active";
+      $mpage = "Transaksi Agent";
+    } elseif ($hotspot == "voucher-settings") {
+      $svouchersettings = "active";
+      $mpage = "Format Voucher";
+    } elseif ($hotspot == "whatsapp-agent-settings") {
+      $swhatsappagent = "active";
+      $mpage = "WhatsApp Agent";
+    } elseif ($hotspot == "pricing") {
+      $spricing = "active";
+      $mpage = "Harga Jual Voucher";
+    } elseif ($hotspot == "payment-gateway-config") {
+      $spaymentgateway = "active";
+      $mpage = "Payment Gateway";
+    } elseif ($hotspot == "payment-methods") {
+      $spaymentmethods = "active";
+      $mpage = "Payment Methods";
+    } elseif ($hotspot == "public-sales") {
+      $spublicsales = "active";
+      $mpage = "Public Sales";
+    }
+    $agentmenu = "menu-open";
+	
   } elseif ($hotspot == "webhook") {
     $sweb = "active";
 	$mpage = "Setting Web Hook";
@@ -404,18 +464,42 @@ include('./info.php');
   <a href="./admin.php?id=settings&session=<?= $session; ?>" class="menu "> <i class="fa fa-gear "></i> <?= $_session_settings ?> </a>
   <a href="./admin.php?id=sessions" class="menu "> <i class="fa fa-gear "></i> <?= $_admin_settings ?> </a>
   <a href="./?hotspot=uplogo&session=<?= $session; ?>" class="menu <?= $uplogo; ?>"> <i class="fa fa-upload "></i> <?= $_upload_logo ?> </a>
-  <a href="./?hotspot=template-editor&template=default&session=<?= $session; ?>" class="menu <?= $teditor; ?>"> <i class="fa fa-edit "></i> <?= $_template_editor ?> </a>          
+  <a href="./?hotspot=template-editor&template=default&session=<?= $session; ?>" class="menu <?= $teditor; ?>"> <i class="fa fa-edit "></i> <?= $_template_editor ?> </a>
+  <a href="./?hotspot=whatsapp-settings&session=<?= $session; ?>" class="menu <?= $swhatsapp; ?>"> <i class="fa fa-whatsapp "></i> WhatsApp Settings </a>
+  <a href="./?hotspot=whatsapp-gateway&session=<?= $session; ?>" class="menu <?= $swagateway; ?>"> <i class="fa fa-server "></i> WhatsApp Gateway </a>          
   </div>
 
-  <!--setwebhook-$swebhook 
-  <div class="dropdown-btn <?= $sweb1; ?>"><i class="fa fa-laptop "></i> Web Hook 
-    <i class="fa fa-caret-down"></i> &nbsp;
+  <!--agent management-->
+  <div class="dropdown-btn <?= $sagent; ?>"><i class=" fa fa-users"></i> Agent/Reseller
+    <i class="fa fa-caret-down"></i>
+  </div>
+  <div class="dropdown-container <?= $agentmenu; ?>">
+    <a href="./?hotspot=agent-setup&session=<?= $session; ?>" class="<?= $sagentsetup; ?>"> <i class="fa fa-cog "></i> Setup Agent System </a>
+    <!-- Agent Management -->
+    <a href="./?hotspot=agent-list&session=<?= $session; ?>" class="<?= $sagentlist; ?>"> <i class="fa fa-list "></i> Daftar Agent </a>
+    <a href="./?hotspot=agent-add&session=<?= $session; ?>" class="<?= $sagentadd; ?>"> <i class="fa fa-user-plus "></i> Tambah Agent </a>
+    <a href="./?hotspot=agent-prices&session=<?= $session; ?>" class="<?= $sagentprices; ?>"> <i class="fa fa-tags "></i> Harga Agent </a>
+    <a href="./?hotspot=agent-topup&session=<?= $session; ?>" class="<?= $sagenttopup; ?>"> <i class="fa fa-money "></i> Topup Saldo </a>
+    <a href="./?hotspot=agent-transactions&session=<?= $session; ?>" class="<?= $sagenttrans; ?>"> <i class="fa fa-history "></i> Transaksi Agent </a>
+    <a href="./?hotspot=whatsapp-agent-settings&session=<?= $session; ?>" class="<?= $swhatsappagent; ?>"> <i class="fa fa-whatsapp "></i> WhatsApp Agent </a>
+    
+    <hr style="margin: 5px 0; border-color: #ddd;">
+    
+    <!-- Voucher Settings -->
+    <a href="./?hotspot=voucher-settings&session=<?= $session; ?>" class="<?= $svouchersettings; ?>"> <i class="fa fa-cog "></i> Format Voucher </a>
+    
+    <hr style="margin: 5px 0; border-color: #ddd;">
+    
+    <!-- Public Sales -->
+    <a href="./?hotspot=pricing&session=<?= $session; ?>" class="<?= $spricing; ?>"> <i class="fa fa-dollar "></i> Harga Public Sales </a>
+    <a href="./?hotspot=payment-gateway-config&session=<?= $session; ?>" class="<?= $spaymentgateway; ?>"> <i class="fa fa-credit-card "></i> Payment Gateway </a>
+    <a href="./?hotspot=payment-methods&session=<?= $session; ?>" class="<?= $spaymentmethods; ?>"> <i class="fa fa-money "></i> Payment Methods </a>
+    <a href="./?hotspot=public-sales&session=<?= $session; ?>" class="<?= $spublicsales; ?>"> <i class="fa fa-shopping-cart "></i> Transaksi Public </a>
   </div>
 
-  <div class="dropdown-container <?= $sweb1; ?>">
-	<a href="./?hotspot=whreport&session=<?= $session; ?>" class="menu "> <i class="fa fa-calculator "></i> Bot Report </a>
-	<a href="./?hotspot=webhook&session=<?= $session; ?>" class="menu "> <i class="fa fa-telegram "></i> Bot Telegram  </a>
-  </div> -->
+ <!--genieacs-->
+  <a href="./?hotspot=genieacs&session=<?= $session; ?>" class="menu <?= $sgenieacs; ?>"><i class="fa fa-wifi"></i> GenieACS - ONU Management</a>
+
  <!--about-->
   <a href="./?hotspot=about&session=<?= $session; ?>" class="menu <?= $sabout; ?>"><i class="fa fa-info-circle"></i> <?= $_about ?></a>
 

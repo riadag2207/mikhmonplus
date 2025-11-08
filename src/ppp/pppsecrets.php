@@ -29,6 +29,8 @@ if (!isset($_SESSION["mikhmon"])) {
 </html>
 ';
 } else {
+	// Save current profile to session for redirect purposes
+	$_SESSION['ppp_profile'] = $prof;
 
 	if ($prof == "all") {
 		$getsecret = $API->comm("/ppp/secret/print");

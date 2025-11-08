@@ -257,11 +257,11 @@ if (!isset($_SESSION["mikhmon"])) {
 		  <div id="r_2"class="row">
 			<div class="card">
 				<div class="card-header">
-					<h3><i class="fa fa-wifi"></i> PPP</h3>
+					<h3><i class="fa fa-wifi"></i> PPP BULANAN</h3>
 				</div>
 				<div class="card-body">
 					<div class="row">
-						<div class="col-4 col-box-6">
+						<div class="col-3 col-box-6">
 							<div class="box bg-blue bmh-75">
 								<a onclick="cancelPage()" href="./?ppp=active&session=<?= $session; ?>">
 									<h1><?= $countpppactive; ?>
@@ -273,7 +273,7 @@ if (!isset($_SESSION["mikhmon"])) {
 								</a>
 							</div>
 						</div>
-						<div class="col-4 col-box-6">
+						<div class="col-3 col-box-6">
 							<div class="box bg-green bmh-75">
 								<a onclick="cancelPage()" href="./?ppp=profiles&session=<?= $session; ?>">
 									<h1><?= $countprofiles; ?>
@@ -285,7 +285,7 @@ if (!isset($_SESSION["mikhmon"])) {
 								</a>
 							</div>
 						</div>
-						<div class="col-4 col-box-6">
+						<div class="col-3 col-box-6">
 							<div class="box bg-yellow bmh-75">
 								<a onclick="cancelPage()" href="./?ppp=secrets&session=<?= $session; ?>">
 									<h1><?= $countsecrets; ?>
@@ -294,7 +294,21 @@ if (!isset($_SESSION["mikhmon"])) {
 									<div>
 										<i class="fa fa-user-secret"></i> <?= $_ppp_secrets ?>
 									</div>
-								</a>
+                     </a>
+                    </div>
+                  </div>
+                  <div class="col-3 col-box-6">
+                    <div class="box bg-red bmh-75">
+                      <a onclick="cancelPage()" href="./?ppp=addsecret&session=<?= $session; ?>">
+                        <div>
+                          <h1><i class="fa fa-user-plus"></i>
+                              <span style="font-size: 15px;"><?= $_generate ?></span>
+                          </h1>
+                        </div>
+                        <div>
+                            <i class="fa fa-user-plus"></i> <?= $_ppp_addsecret ?>
+                        </div>
+                    </a>							
 							</div>
 						</div>
 					</div>
